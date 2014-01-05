@@ -1,0 +1,72 @@
+<!--Author : Sy Le-->
+<html>
+	<head>
+		<script src="CanBoardBeSolved.js"></script>
+		<script src="Tile.js"></script>
+	</head>
+	<body>
+	<style>
+	div{
+		font-size:1.2em;
+		-webkit-touch-callout: none;
+		-webkit-user-select: none;
+		-khtml-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
+	}
+	#picture{
+		float:left;
+	}
+	#stat{		
+		float:left;
+		margin-left:20px;
+	}
+	#btnNewGame{
+		margin-top:20px;
+		border:1px solid black;
+		background-color:#ccc;
+		border-radius:5px;
+		padding:10px;
+	}
+	</style>
+		<canvas id="picture" height="640px" width="640px"></canvas>	
+		
+		<div id="stat">
+			<div>
+				<b>Total Move:</b> <span id="totalMove">0</span>
+			</div>
+			
+			<div>
+				<b>Status:</b> <span id="progress">In Progress</span>
+			</div>
+			
+			<div>
+				<input type="checkbox" id="showHint" onclick="toggleShowHint()" /> <label for="showHint">Show Hint</label>
+			</div>
+			
+			<div id="btnNewGame" onclick="newGame()">
+				New Game
+			</div>
+		</div>
+		
+		<script>
+			var canvas = document.getElementById('picture');
+			var context = canvas.getContext('2d');			
+			var sampleLionBoard = new Board({scramble:false});
+			sampleLionBoard.render();
+			
+			function newGame(){
+				sampleLionBoard = new Board({scramble:true});
+				document.getElementById('showHint').checked = false;
+				sampleLionBoard.render();
+			}
+			
+			
+			function toggleShowHint (){
+				sampleLionBoard.showHint = document.getElementById('showHint').checked;
+				sampleLionBoard.render();
+			}
+		</script>
+	</body>
+</html>
