@@ -1,14 +1,14 @@
 /**
-	author: Sy Le
-	
-	config param contains the height of the image.
-	config = {
-		canvasWidth : canvas width
-		canvasHeight : canvas height
-		tileSize : tile size
-		imgSrc : image src file
-		showHint : whether to denotes the stuffs
-*/
+author: Sy Le
+
+config param contains the height of the image.
+config = {
+canvasWidth : canvas width
+canvasHeight : canvas height
+tileSize : tile size
+imgSrc : image src file
+showHint : whether to denotes the stuffs
+ */
 function Board(config) {
 	//board class definition
 	var t = this;
@@ -39,9 +39,9 @@ function Board(config) {
 				if (t.tiles.indexOf(num) === -1) {
 					t.tiles.push(num);
 				}
-				
-				if (t.tiles.length == t.tileSize * t.tileSize){
-					if(canBoardBeSolved(t.tiles))
+
+				if (t.tiles.length == t.tileSize * t.tileSize) {
+					if (canBoardBeSolved(t.tiles))
 						break;
 					else
 						t.tiles = [];
@@ -85,7 +85,7 @@ function Board(config) {
 					context.strokeStyle = 'green';
 
 					//write text, with shadow
-					if (t.showHint){
+					if (t.showHint) {
 						context.font = "bold 16px Arial";
 						context.fillStyle = "black";
 						context.fillText(imgOffset + 1, x + 12, y + 25);
@@ -107,8 +107,6 @@ function Board(config) {
 			}
 		}
 	}
-	
-	
 
 	function swapElem(arr, i, j) {
 		var tmp = arr[i];
@@ -130,13 +128,13 @@ function Board(config) {
 		var topPiece = idx - t.tileSize;
 		var botPiece = idx + t.tileSize;
 
-		var isLegalMove = false;
+		var moveMade = -1;
 
 		function makeMove(targetMove) {
 			//swapElem
 			if (t.tiles[targetMove] === t.tileSize * t.tileSize - 1) {
 				t.tiles = swapElem(t.tiles, idx, targetMove);
-				isLegalMove = true;
+				moveMade = targetMove;
 			}
 		}
 
@@ -161,7 +159,7 @@ function Board(config) {
 		}
 
 		//only rerender if it is legal move.
-		if (isLegalMove) {
+		if (moveMade !== -1) {
 			document.getElementById('totalMove').innerHTML = ++totalMove;
 
 			//check to see if board is solved
@@ -178,7 +176,7 @@ function Board(config) {
 				document.getElementById('progress').innerHTML = 'Congrat! Puzzle is Solved';
 			}
 
-			t.render();
+			t.render([idx, moveMade]);
 		}
 
 	}
@@ -201,10 +199,31 @@ function Board(config) {
 		canMove(idxFromTile);
 	}
 
+	//clear canvas
+	function clearCanvas(gridsToClear) {
+		if (gridsToClear) {
+			for (var i = 0; i < gridsToClear.length; i++) {
+				var idx = gridsToClear[i];
+
+				//row and col
+				var row = Math.floor(idx / t.tileSize);
+				var col = Math.floor(idx % t.tileSize);
+
+				//x and y , with respect to the board
+				var x = col * t.canvasHeight / t.tileSize;
+				var y = row * t.canvasHeight / t.tileSize;
+				
+				context.clearRect(x, y, w, h);
+			}
+		} else {
+			//clear canvas and redraw
+			context.clearRect(0, 0, canvas.width, canvas.height);
+		}
+	}
+
 	//board public method
-	t.render = function () {
-		//clear canvas and redraw
-		context.clearRect(0, 0, canvas.width, canvas.height);
+	t.render = function (gridsToClear) {
+		clearCanvas(gridsToClear);
 
 		//draw the board
 		for (var i = 0; i < 16; i++) {
