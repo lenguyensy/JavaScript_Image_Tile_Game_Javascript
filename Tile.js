@@ -61,13 +61,13 @@ function Board(config) {
 		var col = Math.floor(idx % t.tileSize);
 
 		//x and y , with respect to the board
-		var x = col * t.canvasHeight / t.tileSize;
+		var x = col * t.canvasWidth / t.tileSize;
 		var y = row * t.canvasHeight / t.tileSize;
 
 		//with respect to the image
 		var imgRow = Math.floor(imgOffset / t.tileSize);
 		var imgCol = Math.floor(imgOffset % t.tileSize);
-		var imgX = imgCol * t.canvasHeight / t.tileSize;
+		var imgX = imgCol * t.canvasWidth / t.tileSize;
 		var imgY = imgRow * t.canvasHeight / t.tileSize;
 
 		//image object
@@ -179,7 +179,9 @@ function Board(config) {
 			t.render([idx, moveMade]);
 		}
 
+		return moveMade !== -1;
 	}
+	
 
 	function getIdxFromMousePos(ev) {
 		var x = ev.offsetX;
@@ -196,7 +198,8 @@ function Board(config) {
 	//hook up canvas on click and figure the coordinate
 	canvas.onclick = function (ev) {
 		var idxFromTile = getIdxFromMousePos(ev);
-		canMove(idxFromTile);
+		if (!canMove(idxFromTile))
+			alert('This move cannot be made. Please revise your move.');
 	}
 
 	//clear canvas
@@ -210,7 +213,7 @@ function Board(config) {
 				var col = Math.floor(idx % t.tileSize);
 
 				//x and y , with respect to the board
-				var x = col * t.canvasHeight / t.tileSize;
+				var x = col * t.canvasWidth / t.tileSize;
 				var y = row * t.canvasHeight / t.tileSize;
 				
 				context.clearRect(x, y, w, h);
